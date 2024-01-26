@@ -4,6 +4,7 @@ from jira import comment_on_ticket
 
 app = Flask(__name__)
 chain = bedrock.initialize()
+replied = []
 
 @app.route('/comment', methods=["POST"])
 def comment():
@@ -14,17 +15,22 @@ def comment():
     title = data["title"]
     description = data["description"]
     
-    input_from_user = f"""There is a new ticket.
-        Title: {title}
-        Description: {description}
+    if key not in replied:
+        print("Commenting on Issue:", key)
         
-        Please help out.  
-    """
-    res = bedrock.analyse_ticket(chain, input_from_user)
-    
-    comment_text = res
-    
-    comment_on_ticket(key, comment_text)
+        input_from_user = f"""There is a new ticket.
+            Title: {title}
+            Description: {description}
+            
+            Please help out.  
+        """
+        res = bedrock.analyse_ticket(chain, input_from_user)
+        
+        comment_text = res
+        
+        comment_on_ticket(key, comment_text)
+        
+        replied.append(key)
     
     return jsonify({
         "message": "Success"

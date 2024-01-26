@@ -1,0 +1,5 @@
+flask
+requests
+boto3
+langchain
+python-dotenv

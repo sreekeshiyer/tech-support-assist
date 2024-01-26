@@ -85,7 +85,7 @@ def comment_on_ticket(key, text):
      auth=auth
   )
   
-  print(json.dumps(json.loads(response.text), sort_keys=True, indent=4, separators=(",", ": ")))
+  #print(json.dumps(json.loads(response.text), sort_keys=True, indent=4, separators=(",", ": ")))
   
   # Check the response
   if response.status_code == 201:

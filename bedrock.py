@@ -86,7 +86,7 @@ def initialize():
     
     code = generate_prompt_template()
     
-    all_tickets = '\n'.join([f"{i['key']: i['summary']}" for i in fetch_issues()])
+    all_tickets = '\n'.join([f"{i['key']}: {i['summary']}" for i in fetch_issues()])
     
     issues = f"""
     Existing Tickets:

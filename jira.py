@@ -1,35 +1,10 @@
 import requests
 from requests.auth import HTTPBasicAuth
 from config import JIRA_USERNAME, JIRA_TOKEN, JIRA_URL
-from bedrock import bedrock_chain, run_chain
-
 
 # Jira authentication details
 username = JIRA_USERNAME
 api_token = JIRA_TOKEN  # You can generate this from Jira settings
-
-
-# Get Payload from Bedrock
-
-state = {}
-state["llm_chain"] = bedrock_chain()
-state["questions"], state["answers"] = [], []
-
-llm_chain = state['llm_chain']
-
-input = "Not able to add element to array."
-result, amount_of_tokens = run_chain(llm_chain, input)
-question_with_id = {
-    "question": input,
-    "id": len(state['questions']),
-    "tokens": amount_of_tokens,
-}
-state['questions'].append(question_with_id)
-
-state['answers'].append(
-    {"answer": result, "id": len(state['questions'])}
-)
-
 
 
 # Comment payload

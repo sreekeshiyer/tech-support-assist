@@ -4,6 +4,7 @@ from langchain.chains import ConversationChain
 from langchain.llms.bedrock import Bedrock
 from langchain.memory import ConversationBufferMemory
 from langchain.prompts import PromptTemplate
+from jira import fetch_issues
 
 print("Imported all modules")
 
@@ -30,17 +31,13 @@ def bedrock_chain():
     
     prompt_template = """You are a bot used for tech support. You will be asked questions based on the provided information.
 
-    Remember this information about ticket ids and their title;
-    Followed by details about a codebase in Python, with file path followed by the codeblock covered in backticks similar to markdown.
-    
-    J-12 - Issue dividing by 0
-    J-14 - List element can’t be accesssed. 
-    J-09 - File not readable
-
     The user will ask a question, based on the question, look through the codebase to see if you find similar code, and share a potential reason why the user is facing the issue; and if there is an existing ticket for it, based on the ones you remember.
     If you're not able to find code that is related to the specified issue, or if you're not able to find a similar existing support ticket, explicitly mention that. 
     
-    The codebase will be provided as context in the first input.
+    The existing tickets and codebase will be provided as context in the first input.
+    
+    Existing Tickets will be provided with their ticket IDs followed by their title.
+    The codebase will contain the name of the file and the code inside of it. 
     
     Current conversation:
     {history}
@@ -89,9 +86,18 @@ def initialize():
     
     code = generate_prompt_template()
     
-    context = f"""Codebase: 
+    all_tickets = '\n'.join([f"{i['key']: i['summary']}" for i in fetch_issues()])
+    
+    issues = f"""
+    Existing Tickets:
+    {all_tickets}
+    """
+    
+    codebase = f"""\nCodebase: 
     {code}
     """   
+    
+    context= issues+codebase
     llm_chain = bedrock_chain()
     result, amount_of_tokens = run_chain(llm_chain, context)
     

@@ -92,3 +92,47 @@ def comment_on_ticket(key, text):
       print("Comment added successfully!")
   else:
       print(f"Failed to add comment. Status code: {response.status_code}, Message: {response.text}")
+      
+      
+def fetch_issues():
+  
+  url = f"{JIRA_URL}/rest/api/3/search"
+  
+  # Set up authentication
+  auth = HTTPBasicAuth(username, api_token)
+  
+  headers = {
+    "Accept": "application/json",
+    "Content-Type": "application/json"
+  }
+  
+  query = {
+  'jql': 'project = ZA'
+  }
+
+  response = requests.request(
+     "GET",
+     url,
+     headers=headers,
+     params=query,
+     auth=auth
+  )
+  
+  if response.status_code == 200:
+    # Parse the JSON response
+    issues = response.json()
+    
+    res = []
+    
+    # Process and print the issues
+    for issue in issues['issues']:
+        res.append(
+            {
+              "key": issue['key'],
+              "summary": issue['fields']['summary']
+            }
+          )
+    return res
+  else:
+      # Print an error message if the request was not successful
+      return []

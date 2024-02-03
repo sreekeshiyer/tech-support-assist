@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, request
 import bedrock
 from jira import comment_on_ticket
+from python_dotenv import load_dotenv
 
 app = Flask(__name__)
 chain = bedrock.initialize()
@@ -38,5 +39,5 @@ def comment():
 
 
 if __name__ == '__main__':
-    
+    load_dotenv()
     app.run()

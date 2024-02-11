@@ -7,6 +7,12 @@ app = Flask(__name__)
 chain = bedrock.initialize()
 replied = []
 
+@app.route('/status', methods=["GET"])
+def status():
+    return jsonify({
+        "status": "OK",
+    })
+
 @app.route('/comment', methods=["POST"])
 def comment():
     

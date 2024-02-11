@@ -8,7 +8,6 @@
 ## python3-pip -> Package manager for Python
 ## gunicorn    -> We'll use this to run the Python server in prod
 ## git         -> bruh
-## anthropic   -> The parent company of the LLM that we're using. Langchain requires this package to be installed to be able to create a ConversationChain with it.
 ## nginx       -> To host the service
 sudo apt-get update -y  && sudo apt-get install python3 python3-pip gunicorn git anthropic nginx -y
 ```
